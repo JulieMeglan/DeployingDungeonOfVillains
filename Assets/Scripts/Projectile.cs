@@ -30,6 +30,7 @@ public class Projectile : MonoBehaviour
     private SpriteRenderer sprite;
 
     private Sprite projectileGraphic;
+    private AudioSource projectileAudio;
 
     private void Awake() {
         myBody = GetComponent<Rigidbody2D>();
@@ -38,6 +39,8 @@ public class Projectile : MonoBehaviour
 
         sprite = GetComponent<SpriteRenderer>();
         projectileGraphic = sprite.sprite;
+
+         projectileAudio = GetComponent<AudioSource>();
     }
 
     private void OnDisable() {
@@ -56,6 +59,10 @@ public class Projectile : MonoBehaviour
 
     public void ProjectileMovement(Vector3 direction) {
         myBody.velocity = (speed * direction);
+
+        if (projectileAudio != null) {
+            projectileAudio.Play();
+        }
     }
 
     void DeactivateBullet() {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterProjectileController : MonoBehaviour
 {
     public static string SHOOT_ANIMATION_PARAMETER = "Shoot";
+     [SerializeField] private AudioSource projectileAudio;
 
     [SerializeField] private float shootingTimerLimit = 0.25f;
     private float pauseBetweenProjectiles;
@@ -33,6 +34,10 @@ public class CharacterProjectileController : MonoBehaviour
                 pauseBetweenProjectiles = shootingTimerLimit + Time.time;
                 projectileAnim.SetTrigger(SHOOT_ANIMATION_PARAMETER);
                 characterGunController.Fire(projectileLine.position);
+            
+
+            if (projectileAudio != null) {
+                projectileAudio.Play(); }
             }
         }
     }

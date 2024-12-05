@@ -9,6 +9,12 @@ public class VillainGroups : MonoBehaviour
 
     [SerializeField] private GameObject door;
 
+    [SerializeField] private AudioSource doorAudio; 
+    [SerializeField] private AudioClip doorOpenSound;
+
+    private float minimumDistance = 0.1f; 
+    [SerializeField] private float separationForce = 0.01f;
+
     private void Start() {
 
         foreach (Transform tr in GetComponentInChildren<Transform>()) {
@@ -17,6 +23,10 @@ public class VillainGroups : MonoBehaviour
             }
         }
 
+    }
+
+    private void FixedUpdate() {
+        MaintainVillainSpacing(); 
     }
 
     public void TurnOnGoingAfterCharacter() {
@@ -44,9 +54,32 @@ public class VillainGroups : MonoBehaviour
             if (door) {
                 door.SetActive(false);
             }
+
+            if (doorAudio != null && doorOpenSound != null) {
+                doorAudio.PlayOneShot(doorOpenSound);
+        }
+        }
+
+
+    }
+
+    private void MaintainVillainSpacing() {
+        for (int i = 0; i < villains.Count; i++) {
+            for (int j = i + 1; j < villains.Count; j++) {
+                if (villains[i] != null && villains[j] != null) {
+                    Vector3 direction = villains[i].transform.position - villains[j].transform.position;
+                    float distance = direction.magnitude;
+
+                    if (distance < minimumDistance) {
+                        Vector3 pushDirection = direction.normalized * separationForce;
+                        villains[i].transform.position += pushDirection;
+                        villains[j].transform.position -= pushDirection;
+                    }
+                }
+            }
         }
     }
-} 
+}
 
 
 
